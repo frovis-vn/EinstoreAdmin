@@ -36,7 +36,7 @@ export default class AppIcon extends Component<Props, State> {
 			if (!empty && id) {
 				const url = `/${context}/${id}/icon`
 				window.Einstore.networking
-					.memoizedGet(url, undefined, false)
+					.memoizedGet(url, undefined, false, false)
 					.then((res: any) => {
 						if (res.status === 500) {
 							throw new Error(`500 error in image loading ${url}`)

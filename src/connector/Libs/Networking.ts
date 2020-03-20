@@ -68,13 +68,14 @@ export class Networking implements Networkable {
 	public get = (
 		path: string,
 		headers: Headers = new Headers(),
-		followRedirect: boolean = true
+		followRedirect: boolean = true,
+		authentication: boolean = true
 	): Promise<Response> => {
 		console.log('GET', path)
 		path = this.normalizeUrl(path)
 		const promise = window
 			.fetch(path, {
-				headers: this.headers(headers),
+				headers: this.headers(headers, authentication),
 				method: 'GET',
 				redirect: followRedirect ? 'follow' : undefined,
 			})
@@ -166,9 +167,9 @@ export class Networking implements Networkable {
 
 	// Private interface
 
-	private headers = (headers: Headers): Headers => {
+	private headers = (headers: Headers, authentication=true): Headers => {
 		headers = this.appendHeader(headers, 'Content-Type', 'application/json;charset=utf-8')
-		if (this.jwt) {
+		if (authentication && this.jwt) {
 			headers = this.appendHeader(headers, 'Authorization', this.jwt)
 		}
 		headers = this.appendHeader(headers, 'User-Agent', 'EinstoreSDK/1.0-JS')
